@@ -1,7 +1,8 @@
 <?php
 session_start();
 include("includes/functions.php");
-include("includes/db.php");
+include("config.php");
+include("vendor/autoload.php");
 
 pr($_POST);
 
@@ -36,6 +37,24 @@ if (!empty($_POST)){
   elseif (strlen($email) > 100){
     $error = "Votre e-mail es trop long !";
   }
+  else {
+    // ==================================
+    // e-mail déjà présent dans la base ?
+    // ==================================
+    $sql="SELECT email FROM users WHERE email= :email";
+    $sth = $dbh->prepare ($sql);
+    // ================================
+    //  l'array remplace le bindValue()
+    // ================================
+    $sth->execute(array(":email" => $email));
+    $foundEmail = $sth->fetchColumn();
+
+    if ($foundEmail) {
+      $error ="Cet email est déja utilisé";
+
+
+  }
+}
   // =======================
   // username vide ?
   // =======================
@@ -47,11 +66,30 @@ if (!empty($_POST)){
   elseif (strlen($username) > 100){
     $error = "Votre pseudo es trop long !";
   }
+  else {
+    // ==================================
+    // e-mail déjà présent dans la base ?
+    // ==================================
+    $sql="SELECT username FROM users WHERE username= :username";
+    $sth = $dbh->prepare ($sql);
+    // ================================
+    //  l'array remplace le bindValue()
+    // ================================
+    $sth->execute(array(":username" => $username));
+    $foundUsername = $sth->fetchColumn();
+
+    if ($foundUsername) {
+      $error ="Ce pseudo est déja utilisé";
+    }
+  }
   // ===============================
   // mot de passe identique?
   // ===============================
   if($password != $password_confirm){
     $error ="Vos mot de passe ne sont pas identique !";
+  }
+  elseif (strlen($password)<=6) {
+    $error="Veuillez utiliser un mot de passe d'au moins 7 lettres ";
   }
   // =======================
   // si on a pas d'erreur
@@ -125,4 +163,7 @@ if (!empty($_POST)){
       </form>
     </div>
 </body>
+<footer>
+  <?php include("footer.php"); ?>
+</footer>
 </html>
