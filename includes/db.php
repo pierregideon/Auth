@@ -1,10 +1,5 @@
 <?php
-
-    define("DBHOST", "localhost");
-    define("DBUSER", "root");
-    define("DBPASS", "");
-    define("DBNAME", "auth");
-
+include("config.php");
 	try {
 		$dbh = new PDO(
 			'mysql:host='.DBHOST.';dbname='.DBNAME,

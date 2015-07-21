@@ -37,6 +37,10 @@ if (!empty($_POST)){
   elseif (strlen($email) > 100){
     $error = "Votre e-mail es trop long !";
   }
+  // contient uniquement des lettres, des chiffres et des tirets et des underscore
+  elseif(!preg_match($usernameRegexp, "$username")){
+    echo "Votre pseudo doit correspondre !";
+
   else {
     // ==================================
     // e-mail déjà présent dans la base ?
@@ -55,6 +59,12 @@ if (!empty($_POST)){
 
   }
 }
+// ============================================
+// expression rationnelle pour nos usernames
+// ============================================
+$usernameRegexp ="/^[\p{L}0-9._-]{2,100}$/u";
+
+
   // =======================
   // username vide ?
   // =======================
@@ -66,6 +76,18 @@ if (!empty($_POST)){
   elseif (strlen($username) > 100){
     $error = "Votre pseudo es trop long !";
   }
+  // ====================================
+  // username est un e-mail ?
+  // ====================================
+  elseif (filter_var($username,FILTER_VALIDATE_EMAIL)){
+    $error="Veuillez ne pas utiliser d'e-mail comme pseudo !"
+      }
+      // ==========================================================================
+      // contient uniquement des lettres , des chiffres et des tirets et underscore
+      // ==========================================================================
+      elseif (condition) {
+        # code...
+      }
   else {
     // ==================================
     // e-mail déjà présent dans la base ?
